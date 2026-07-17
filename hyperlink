@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="https://api.injuries.lu/favicon.ico" type="image/x-icon" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VANTA | HYPERLINK</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --black: #000000;
+      --white: #FFFFFF;
+      --gray-dark: #121212;
+      --gray-light: #2A2A2A;
+      --accent: #FFFFFF;
+      --blue: #5865F2;
+      --purple: #9147FF;
+    }
+    
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      margin: 0;
+      padding: 20px;
+      background: var(--black);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-x: hidden;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+    }
+
+    .bg-particle {
+      position: fixed;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      animation: float 15s infinite linear;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.1; }
+      90% { opacity: 0.1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      background: rgba(18, 18, 18, 0.95);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--gray-light);
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      margin: 20px 0;
+      transition: transform 0.5s ease-out;
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      color: var(--accent);
+      text-align: center;
+      margin: 0 0 30px 0;
+      font-weight: 700;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      position: relative;
+      padding-bottom: 15px;
+      text-transform: uppercase;
+      animation: textGlow 3s infinite alternate;
+    }
+
+    @keyframes textGlow {
+      from { text-shadow: 0 0 5px rgba(255,255,255,0.3); }
+      to { text-shadow: 0 0 15px rgba(255,255,255,0.6); }
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      transform-style: preserve-3d;
+    }
+
+    .button-row a {
+      flex: 1;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    label {
+      display: block;
+      margin: 20px 0 10px;
+      color: var(--white);
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      opacity: 0.9;
+      transition: all 0.3s ease;
+    }
+
+    label:hover {
+      opacity: 1;
+      transform: translateX(5px);
+    }
+
+    .custom-select {
+      position: relative;
+      width: 100%;
+      margin: 20px 0;
+      transition: all 0.3s ease;
+    }
+
+    .custom-select:hover {
+      transform: translateY(-2px);
+    }
+
+    .custom-select select {
+      width: 100%;
+      padding: 14px 20px;
+      border: 1px solid var(--gray-light);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      background: var(--gray-dark);
+      color: var(--white);
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.3s ease;
+    }
+
+    .custom-select select:hover {
+      border-color: var(--white);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 20px;
+      border: 1px solid var(--gray-light);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      background: var(--gray-dark);
+      color: var(--white);
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:hover {
+      border-color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    button, .community-button, .beaming-sites-button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      text-align: center;
+      display: block;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover, .community-button:hover, .beaming-sites-button:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    button:active, .community-button:active, .beaming-sites-button:active {
+      transform: translateY(1px);
+    }
+
+    button::after, .community-button::after, .beaming-sites-button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: all 0.6s;
+    }
+
+    button:hover::after, .community-button:hover::after, .beaming-sites-button:hover::after {
+      left: 100%;
+    }
+
+    button {
+      background: var(--white);
+      color: var(--black);
+      margin: 15px 0;
+    }
+
+    .community-button {
+      background: var(--blue);
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .beaming-sites-button {
+      background: var(--purple);
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .output {
+      margin-top: 25px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      border: 1px solid var(--gray-light);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      min-height: 100px;
+      transition: all 0.5s ease;
+      animation: pulseBorder 3s infinite;
+    }
+
+    @keyframes pulseBorder {
+      0%, 100% { border-color: var(--gray-light); }
+      50% { border-color: var(--white); }
+    }
+
+    .brand {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      z-index: 20;
+      transition: all 0.3s ease;
+    }
+
+    .brand:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+
+    @media (max-width: 500px) {
+      .button-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="brand">VANTA</div>
+  
+  <div class="container" id="container">
+    <h1>VANTA | HYPERLINK</h1>
+    
+    <div class="button-row">
+      <a href="https://campsite.bio/vantabeams" target="_blank" class="beaming-sites-button">BEST SITES</a>
+      <a href="https://discord.gg/QdjZeq9N5C" target="_blank" class="community-button">JOIN OUR COMMUNITY</a>
+    </div>
+    
+    <label for="url">URL to shorten:</label>
+    <input type="text" id="url" placeholder="https://example.com">
+    
+    <label for="format">Link type:</label>
+    <div class="custom-select">
+      <select id="format">
+        <option value="profile">Profile Link</option>
+        <option value="private-server">Private Server</option>
+        <option value="group">Group/Community</option>
+      </select>
+    </div>
+    
+    <button onclick="generateLink()">Format for Discord</button>
+    
+    <div class="output" id="output"></div>
+  </div>
+
+  <script>
+    // Create animated background particles
+    function createParticles() {
+      const particleCount = 20;
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('bg-particle');
+        
+        const size = Math.random() * 10 + 5;
+        const posX = Math.random() * 100;
+        const delay = Math.random() * 15;
+        const duration = Math.random() * 10 + 10;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = '100vh';
+        particle.style.animation = `float ${duration}s linear ${delay}s infinite`;
+        particle.style.opacity = Math.random() * 0.2;
+        
+        document.body.appendChild(particle);
+      }
+    }
+    
+    // Mouse movement parallax effect
+    document.addEventListener('mousemove', (e) => {
+      const container = document.getElementById('container');
+      const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+      const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+      container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+    
+    // Reset position when mouse leaves
+    document.addEventListener('mouseleave', () => {
+      const container = document.getElementById('container');
+      container.style.transform = 'rotateY(0deg) rotateX(0deg)';
+    });
+    
+    async function shortenUrl(longUrl) {
+      if (!longUrl) return longUrl;
+      
+      // Ensure URL has proper protocol
+      if (!longUrl.match(/^https?:\/\//)) {
+        longUrl = 'https://' + longUrl;
+      }
+      
+      try {
+        // First try with JSON API
+        const jsonResponse = await fetch(`https://is.gd/create.php?format=json&url=${encodeURIComponent(longUrl)}`);
+        
+        if (jsonResponse.ok) {
+          const jsonData = await jsonResponse.json();
+          
+          // Check for API errors in JSON response
+          if (jsonData.errorcode) {
+            throw new Error(jsonData.errormessage || 'API error');
+          }
+          
+          if (jsonData.shorturl && jsonData.shorturl.startsWith('http')) {
+            return jsonData.shorturl;
+          }
+        }
+        
+        // If JSON fails, try simple format as fallback
+        const simpleResponse = await fetch(`https://is.gd/create.php?format=simple&url=${encodeURIComponent(longUrl)}`);
+        
+        if (simpleResponse.ok) {
+          const simpleUrl = await simpleResponse.text();
+          
+          // Validate simple response
+          if (simpleUrl.startsWith('http')) {
+            return simpleUrl;
+          } else if (simpleUrl.startsWith('Error:')) {
+            throw new Error(simpleUrl);
+          }
+        }
+        
+        throw new Error('No valid response from API');
+        
+      } catch (error) {
+        console.error('URL shortening failed:', error);
+        return longUrl; // Return original if shortening fails
+      }
+    }
+    
+    async function generateLink() {
+      const url = document.getElementById('url').value.trim();
+      if (!url) {
+        alert('Please enter a URL');
+        return;
+      }
+      
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = '<p>Shortening URL...</p>';
+      outputDiv.style.opacity = '0';
+      outputDiv.style.transform = 'translateY(20px)';
+      
+      try {
+        const shortUrl = await shortenUrl(url);
+        const format = document.getElementById('format').value;
+        
+        let prefix;
+        switch(format) {
+          case 'profile':
+            prefix = '[https__:__//www.roblox.com/users/6700452/profile]';
+            break;
+          case 'private-server':
+            prefix = '[https_:_//www.roblox.com/share?code=9b3bf13e5fe0894d941ac87ac52f8d1d&type=Server]';
+            break;
+          case 'group':
+            prefix = '[https__:__//www.roblox.com/groups/7429401045]';
+            break;
+          default:
+            prefix = '[Link]';
+        }
+        
+        const formattedLink = `${prefix}(${shortUrl})`;
+        
+        setTimeout(() => {
+          outputDiv.style.opacity = '1';
+          outputDiv.style.transform = 'translateY(0)';
+          outputDiv.innerHTML = `
+            <p><strong>Your Discord Hyperlink:</strong></p>
+            <p style="word-break: break-all;">${formattedLink}</p>
+            <p><small>Copied to clipboard!</small></p>
+          `;
+        }, 300);
+        
+        try {
+          await navigator.clipboard.writeText(formattedLink);
+        } catch (err) {
+          console.error('Failed to copy:', err);
+          outputDiv.innerHTML += `<p><small>Please copy manually</small></p>`;
+        }
+      } catch (error) {
+        outputDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+        outputDiv.style.opacity = '1';
+        outputDiv.style.transform = 'translateY(0)';
+      }
+    }
+    
+    // Initialize everything
+    createParticles();
+    
+    // Auto-focus URL input on load
+    document.getElementById('url').focus();
+  </script>
+</body>
+</html>
