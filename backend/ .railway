@@ -1,0 +1,4 @@
+[build]
+  buildCommand = "npm install && npx tsc --skipLibCheck"
+[deploy]
+  startCommand = "node dist/app.js"
