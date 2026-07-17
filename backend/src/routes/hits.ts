@@ -10,11 +10,11 @@ router.get('/', async (req: Request, res: Response) => {
     const offset = (Number(page) - 1) * Number(limit);
 
     const db = await openDb();
-    let query = 'SELECT * FROM hits WHERE user LIKE ? ORDER BY created_at DESC LIMIT ? OFFSET ?';
-    let countQuery = 'SELECT COUNT(*) as total FROM hits WHERE user LIKE ?';
-
-    const hits = await db.all(query, [`%${search}%`, Number(limit), offset]);
-    const total = await db.get(countQuery, [`%${search}%`]);
+    const hits = await db.all(
+        'SELECT * FROM hits WHERE user LIKE ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
+        [`%${search}%`, Number(limit), offset]
+    );
+    const total = await db.get('SELECT COUNT(*) as total FROM hits WHERE user LIKE ?', [`%${search}%`]);
 
     res.json({
         hits,
